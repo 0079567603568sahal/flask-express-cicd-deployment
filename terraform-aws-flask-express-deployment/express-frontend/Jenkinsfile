@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('Pull Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/0079567603568sahal/express-frontend.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Restart App') {
+            steps {
+                sh 'pm2 restart express-app || pm2 start "node index.js" --name express-app'
+            }
+        }
+    }
+}
