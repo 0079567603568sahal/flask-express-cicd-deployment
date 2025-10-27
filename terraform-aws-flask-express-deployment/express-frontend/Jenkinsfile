@@ -1,20 +1,44 @@
 pipeline {
     agent any
+
     stages {
-        stage('Pull Code') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/0079567603568sahal/express-frontend.git'
+                git branch: 'main', url: 'https://github.com/0079567603568sahal/flask-express-cicd-deployment.git'
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                dir('terraform-aws-flask-express-deployment/express-frontend') {
+                    sh '''
+                    echo "Installing Node.js dependencies..."
+                    npm install
+                    '''
+                }
             }
         }
-        stage('Restart App') {
+
+        stage('Run Express Server') {
             steps {
-                sh 'pm2 restart express-app || pm2 start "node index.js" --name express-app'
+                dir('terraform-aws-flask-express-deployment/express-frontend') {
+                    sh '''
+                    echo "Starting Express frontend using PM2..."
+                    pm2 delete express-frontend || true
+                    pm2 start index.js --name express-frontend
+                    pm2 save
+                    '''
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Express frontend deployed successfully!'
+        }
+        failure {
+            echo '❌ Deployment failed. Check Jenkins console for errors.'
         }
     }
 }
