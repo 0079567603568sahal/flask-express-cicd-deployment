@@ -13,7 +13,8 @@ pipeline {
                 dir('terraform-aws-flask-express-deployment/flask-backend') {
                     sh '''
                     echo "Installing Flask dependencies..."
-                    python3 -m pip install -r requirements.txt
+                    python3 -m pip install --break-system-packages -r requirements.txt
+
                     '''
                 }
             }
