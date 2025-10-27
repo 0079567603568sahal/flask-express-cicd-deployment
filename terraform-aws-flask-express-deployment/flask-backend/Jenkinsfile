@@ -1,34 +1,48 @@
 pipeline {
     agent any
 
+    tools {
+        python 'python3'
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/0079567603568sahal/terraform-aws-flask-express-deployment.git'
+                git branch: 'main', url: 'https://github.com/0079567603568sahal/flask-express-cicd-deployment.git'
             }
         }
 
-        stage('Set up Python Environment') {
+        stage('Install Dependencies') {
             steps {
-                sh '''
-                cd flask-backend
-                sudo apt update -y
-                sudo apt install -y python3-venv python3-pip
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r requirements.txt
-                '''
+                dir('terraform-aws-flask-express-deployment/flask-backend') {
+                    sh '''
+                    echo "Installing Flask dependencies..."
+                    pip3 install -r requirements.txt
+                    '''
+                }
             }
         }
 
         stage('Run Flask Server') {
             steps {
-                sh '''
-                cd flask-backend
-                . venv/bin/activate
-                nohup python3 app.py &
-                '''
+                dir('terraform-aws-flask-express-deployment/flask-backend') {
+                    sh '''
+                    echo "Starting Flask backend using PM2..."
+                    pm2 delete flask-backend || true
+                    pm2 start app.py --name flask-backend --interpreter python3
+                    pm2 save
+                    '''
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Flask backend deployed successfully!'
+        }
+        failure {
+            echo '❌ Deployment failed. Check Jenkins console for errors.'
         }
     }
 }
