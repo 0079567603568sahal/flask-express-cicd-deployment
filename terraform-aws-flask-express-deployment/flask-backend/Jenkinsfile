@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        python 'python3'
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -17,7 +13,7 @@ pipeline {
                 dir('terraform-aws-flask-express-deployment/flask-backend') {
                     sh '''
                     echo "Installing Flask dependencies..."
-                    pip3 install -r requirements.txt
+                    python3 -m pip install -r requirements.txt
                     '''
                 }
             }
