@@ -1,4 +1,5 @@
-# CI/CD Pipeline on AWS (Flask + Express)
+⭐ Reduced manual deployment effort by automating build and deployment using Jenkins CI/CD.
+# Automated CI/CD Pipeline on AWS (Flask + Express)
 
 ## 🚀 Overview
 Built an automated CI/CD pipeline to deploy a Flask backend and Express frontend on AWS EC2 using Jenkins.
