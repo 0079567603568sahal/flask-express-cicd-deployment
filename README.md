@@ -1,4 +1,4 @@
-⭐ Reduced manual deployment effort by automating build and deployment using Jenkins CI/CD.
+⭐ Reduced manual deployment effort by automating build and deployment with Jenkins CI/CD, enabling faster and reliable releases.
 # Automated CI/CD Pipeline on AWS (Flask + Express)
 
 ## 🚀 Overview
